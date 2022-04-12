@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <title>3112</title>
+</head>
+
+<body>
+<div class="container">
+    <div clss="box">
+        <div class="title">다중 치환 암호화</div>
+        <div class="edit-container">
+            <form class="edit-form" action="/encryption" method="post">
+                <label for="string" class="edit-text"> 평 문 </label>
+                <input type="text" id="string" name="string" class="input-box">
+                <br><br>
+                <label for="key" class="edit-text">암호키 </label>
+                <input type="text" id="key" name="key" class="input-box">
+                <br><br>
+                <input type="submit" value="암호화">
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+*{
+    font-family: 'Noto Sans KR', sans-serif;
+}
+body {
+    background-color: #CBDED8;
+}
+
+.container {
+    background-color: white;
+    margin: 50px 50px auto;
+    padding: 1px;
+    height: 900px;
+}
+
+.title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 200px;
+    margin-bottom: 50px;
+}
+.edit-container{
+    font-size: 20px;
+    text-align: center;
+}
+.input-box{
+    width: 400px;
+}
