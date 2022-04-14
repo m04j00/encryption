@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MaterialDto {
-    private String string;
+public class DataDto {
+    private String plain;
     private String key;
 
 }

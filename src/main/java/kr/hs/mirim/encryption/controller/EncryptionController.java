@@ -1,6 +1,6 @@
 package kr.hs.mirim.encryption.controller;
 
-import kr.hs.mirim.encryption.dto.MaterialDto;
+import kr.hs.mirim.encryption.dto.DataDto;
 import kr.hs.mirim.encryption.service.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,18 +18,18 @@ public class EncryptionController {
     }
 
     @PostMapping("/encryption")
-    public String encryption(MaterialDto dataDto, Model model) {
-        System.out.println(dataDto.getKey());
-        int[] a = {1, 2, 3};
-        model.addAttribute("string", dataDto.getString());
+    public String encryption(DataDto dataDto, Model model) {
+        // 입력받은 문자열과 암호키
+        model.addAttribute("string", dataDto.getPlain());
         model.addAttribute("key", dataDto.getKey());
-        model.addAttribute("arr", a);
-        service.stringToEncryption(dataDto);
+
+        System.out.println(dataDto.getPlain());
+        System.out.println(dataDto.getKey());
+        DataDto resultDto = service.stringToEncryption(dataDto);
+        char[][] board = service.createBoard(resultDto);
+        resultDto = service.plainToEncryption(resultDto);
+        System.out.println(resultDto.getKey());
+        System.out.println(resultDto.getPlain());
         return "encryption";
     }
 }
-
-// 1. 입력받은 문자열, 암호키를 공백제거하고 암호화 만들어서 세 개를 dto에 저장
-// 2. 문자열, 암호키로 암호화
-// 3. 암호판 출력
-// 4.
