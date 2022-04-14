@@ -8,5 +8,7 @@ import lombok.Setter;
 public class DataDto {
     private String plain;
     private String key;
-
+    private String zPoint;
+    private String encryption;
+    private String overlap;
 }

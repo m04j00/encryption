@@ -19,17 +19,13 @@ public class EncryptionController {
 
     @PostMapping("/encryption")
     public String encryption(DataDto dataDto, Model model) {
-        // 입력받은 문자열과 암호키
+        DataDto materialDto =  service.stringToEncryption(dataDto);
+        char[][] board = service.createBoard(materialDto);
+        DataDto resultDto = service.plainToEncryption(materialDto, board);
+        String encryptionToPlain = service.encryptionToPlain(resultDto.getEncryption(), board, materialDto.getZPoint(), resultDto.getOverlap());
+
         model.addAttribute("string", dataDto.getPlain());
         model.addAttribute("key", dataDto.getKey());
-
-        System.out.println(dataDto.getPlain());
-        System.out.println(dataDto.getKey());
-        DataDto resultDto = service.stringToEncryption(dataDto);
-        char[][] board = service.createBoard(resultDto);
-        resultDto = service.plainToEncryption(resultDto);
-        System.out.println(resultDto.getKey());
-        System.out.println(resultDto.getPlain());
         return "encryption";
     }
 }

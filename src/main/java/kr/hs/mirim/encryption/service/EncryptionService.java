@@ -4,19 +4,20 @@ import kr.hs.mirim.encryption.dto.DataDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class EncryptionService {
-    public static char[][] board = new char[5][5];
 
     // 입력받은 문자열을 정리하여 DTO로 변환하는 메소드
     public DataDto stringToEncryption(DataDto materialDto) {
         DataDto dataDto = new DataDto();
+        String plain = cleanString(materialDto.getPlain());
 
+        // z 위치 체크
+        dataDto.setZPoint(zCheck(plain));
         // 문자열 공백 제거 및 대문자 변환
-        dataDto.setPlain(cleanString(materialDto.getPlain()).replaceAll("Z", "Q")); // 문자열의 Z -> Q 변환
+        dataDto.setPlain(plain.replaceAll("Z", "Q")); // Z -> Q
         dataDto.setKey(cleanString(materialDto.getKey()));
 
         return dataDto;
@@ -24,6 +25,7 @@ public class EncryptionService {
 
     // 암호판 생성하는 메소드
     public char[][] createBoard(DataDto dataDto) {
+        char[][] board = new char[5][5];
         String key = dataDto.getKey() + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder boardKey = new StringBuilder();
 
@@ -44,77 +46,94 @@ public class EncryptionService {
     }
 
     // 암호화 메소드
-    public DataDto plainToEncryption(DataDto dataDto) {
-        List<Character> plainList = new ArrayList<>();
-        List<Character> encryptionList = new ArrayList<>();
-        String plain = dataDto.getPlain();
-        DataDto resultDto = new DataDto();
+    public DataDto plainToEncryption(DataDto dataDto, char[][] board) {
+        List<Character> plainList = new ArrayList<>(); // 중복 처리한 palin을 저장할 list
+        List<Character> encryptionList = new ArrayList<>(); // 암호문을 저장할 list
+        String plain = dataDto.getPlain(); // dto의 plain을 변수로 저장
+        DataDto resultDto = new DataDto(); // 반환할 dto 선언
+        StringBuilder overlapPoint = new StringBuilder(); // 중복 위치 체크하기 위한 변수 선언
 
         //연속되는 글자가 중복시 X 추가
         if (plain.length() % 2 != 0) plain += 'X'; // plain이 2의 배수가 아니면 두 글자씩 자를 때 마지막에 한 개가 남아서 X로 채움
-        System.out.println(plain);
-        System.out.println(Arrays.deepToString(board));
         for (int i = 0; i < plain.length(); i += 2) {
             if (String.valueOf(plain.charAt(i)).equals((String.valueOf(plain.charAt(i + 1))))) {  //연속되는 글자가 같으면
                 plainList.add(plain.charAt(i));
                 plainList.add('X');
+                overlapPoint.append("01"); // 중복 위치는 1, 중복 위치가 아닐 경우 0
             } else {
                 plainList.add(plain.charAt(i));
                 plainList.add(plain.charAt(i + 1));
+                overlapPoint.append("00");
             }
         }
+        resultDto.setOverlap(overlapPoint.toString()); // 중복 위치를 담은 문자열 dto에 저장
 
-        StringBuilder cutTwoPlain = new StringBuilder();
+        StringBuilder cutTwoPlain = new StringBuilder(); // 두 글자씩 자른 plain 저장할 변수 선언
         for (int i = 0; i < plainList.size(); i += 2) {
             cutTwoPlain.append(plainList.get(i)).append(plainList.get(i + 1)).append(" ");
         }
-        resultDto.setPlain(cutTwoPlain.toString());
-        int[][] point;
-        StringBuilder cutTwoEncryption = new StringBuilder();
-        for (int i = 0; i < plainList.size(); i += 2) {
+        resultDto.setPlain(cutTwoPlain.toString()); // 두 글자씩 자른 plain dto에 저장
 
-            point = rowColSearch(plainList.get(i), plainList.get(i + 1));
+        StringBuilder cutTwoEncryption = new StringBuilder(); // 두 글자씩 자른 암호문 저장할 변수 선언
+        for (int i = 0; i < plainList.size(); i += 2) {
+            // 각 좌표를 저장할 2차원 배열, 5*5 암호문에서의 좌표 저장
+            int[][] point = rowColSearch(plainList.get(i), plainList.get(i + 1), board);
 
             if (point[0][1] == point[1][1]) {  //같은 행에 있을 때
-                encryptionList.add(board[isFirst(point[0][0])][point[0][1]]);
-                encryptionList.add(board[isFirst(point[1][0])][point[1][1]]);
+                encryptionList.add(board[isLast(point[0][0])][point[0][1]]);
+                encryptionList.add(board[isLast(point[1][0])][point[1][1]]);
             } else if (point[0][0] == point[1][0]) {  //같은 열에 있을 때
-                encryptionList.add(board[point[0][0]][isFirst(point[0][1])]);
-                encryptionList.add(board[point[1][0]][isFirst(point[1][1])]);
+                encryptionList.add(board[point[0][0]][isLast(point[0][1])]);
+                encryptionList.add(board[point[1][0]][isLast(point[1][1])]);
             } else {  //다른 행, 다른 열에 있을 때
                 encryptionList.add(board[point[1][0]][point[0][1]]);
                 encryptionList.add(board[point[0][0]][point[1][1]]);
             }
 
-            //암호화된 문자열 출력
             cutTwoEncryption.append(encryptionList.get(i)).append(encryptionList.get(i + 1)).append(" ");
         }
-        resultDto.setKey(cutTwoEncryption.toString());
+        resultDto.setEncryption(cutTwoEncryption.toString()); // 두 글자씩 자른 암호문 dto에 저장
         return resultDto;
     }
 
     // 복호화 메소드
-    public String encryptionToPlain(List<Character> encryptionList) {
-        List<Character> plainList = new ArrayList<>();
+    public String encryptionToPlain(String encryption, char[][] board, String _zPoint, String _overlapPoint) {
+        List<Character> plainList = new ArrayList<>(); // 복호문 저장할 리스트 선언
+        encryption = encryption.replaceAll(" ", ""); // 파라미터로 받은 암호문은 두 글자씩 띄어져있어서 공백 제거
+        StringBuilder resultPlain = new StringBuilder(); // 복호문 저장할 변수 선언
 
-        int[][] point;
-        StringBuilder cutTwoPlain = new StringBuilder();
-        for (int i = 0; i < encryptionList.size(); i += 2) {
-            point = rowColSearch(encryptionList.get(i), encryptionList.get(i + 1));
+        for (int i = 0; i < encryption.length(); i += 2) {
+            int[][] point = rowColSearch(encryption.charAt(i), encryption.charAt(i+1), board);
 
-            if (point[0][1] == point[1][1]) {  //같은 행에 있을 때
+            if (point[0][1] == point[1][1]) {  //행이 같은 경우 각각 바로 아래열 대입
                 plainList.add(board[isFirst(point[0][0])][point[0][1]]);
                 plainList.add(board[isFirst(point[1][0])][point[1][1]]);
-            } else if (point[0][0] == point[1][0]) {  //같은 열에 있을 때
+            } else if (point[0][0] == point[1][0]) {  //열이 같은 경우 각각 바로 옆 열 대입
                 plainList.add(board[point[0][0]][isFirst(point[0][1])]);
                 plainList.add(board[point[1][0]][isFirst(point[1][1])]);
-            } else {  //다른 행, 다른 열에 있을 때
+            } else {  //행, 열 다른 경우 각자 대각선에 있는 곳
                 plainList.add(board[point[1][0]][point[0][1]]);
                 plainList.add(board[point[0][0]][point[1][1]]);
             }
-            cutTwoPlain.append(plainList.get(i)).append(plainList.get(i + 1)).append(" ");
+            resultPlain.append(plainList.get(i)).append(plainList.get(i + 1));
         }
-        return cutTwoPlain.toString();
+
+        String[] overlapPoint = _overlapPoint.split(""); // 중복 위치를 문자열 배열로 선언
+        String[] zPoint = _zPoint.split(""); // Z 위치를 문자열 배열로 선언
+        // Z -> Q, 중복 값 되돌리는 반복문
+        for(int i = 0; i < zPoint.length; i++){
+            if(overlapPoint[i].equals("1") && resultPlain.charAt(i) == 'X') {
+                resultPlain = new StringBuilder(resultPlain.substring(0, i) + resultPlain.charAt(i - 1) + resultPlain.substring(i + 1));
+            }
+            if(zPoint[i].equals("1") && resultPlain.charAt(i) == 'Q'){
+                resultPlain = new StringBuilder(resultPlain.substring(0, i) + 'Z' + resultPlain.substring(i + 1));
+            }
+        }
+        // 마지막 값이 X이면 X를 자름
+        if(resultPlain.charAt(resultPlain.length() - 1) == 'X'){
+            resultPlain = new StringBuilder(resultPlain.substring(0, resultPlain.length() - 1));
+        }
+        return resultPlain.toString();
     }
 
     // 문자열에 포함된 공백을 제거하고 대문자로 변환하는 메소드
@@ -122,7 +141,7 @@ public class EncryptionService {
         return string.toUpperCase().replaceAll(" ", "");
     }
 
-    public int[][] rowColSearch(char a, char b) {
+    public int[][] rowColSearch(char a, char b, char[][] board) {
         int[][] point = new int[2][2];
         for (int j = 0; j < 5; j++) {
             for (int k = 0; k < 5; k++) {
@@ -149,5 +168,18 @@ public class EncryptionService {
     public int isFirst(int k) {
         if (k <= 0) return 4;
         else return k - 1;
+    }
+
+    public String zCheck(String plain){
+        StringBuilder zPoint = new StringBuilder();
+        String[] plainArray = plain.split("");
+        for(String s : plainArray){
+            if(s.equals("Z")){
+                zPoint.append("1");
+            }else{
+                zPoint.append("0");
+            }
+        }
+        return zPoint.toString();
     }
 }
