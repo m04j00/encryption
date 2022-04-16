@@ -1,6 +1,8 @@
 package kr.hs.mirim.encryption.service;
 
-import kr.hs.mirim.encryption.dto.DataDto;
+import kr.hs.mirim.encryption.dto.EncryptionData;
+import kr.hs.mirim.encryption.dto.InputData;
+import kr.hs.mirim.encryption.dto.MaterialData;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,23 +12,18 @@ import java.util.List;
 public class EncryptionService {
 
     // 입력받은 문자열을 정리하여 DTO로 변환하는 메소드
-    public DataDto stringToEncryption(DataDto materialDto) {
-        DataDto dataDto = new DataDto();
-        String plain = cleanString(materialDto.getPlain());
-
-        // z 위치 체크
-        dataDto.setZPoint(zCheck(plain));
-        // 문자열 공백 제거 및 대문자 변환
-        dataDto.setPlain(plain.replaceAll("Z", "Q")); // Z -> Q
-        dataDto.setKey(cleanString(materialDto.getKey()));
-
-        return dataDto;
+    public MaterialData stringToEncryption(InputData inputData) {
+        String plain = cleanString(inputData.getPlain()); // 공백제거, 대문자 변환
+        String zPoint = zCheck(plain); // plain의 Z 위치 체크, 복호화할 때 사용
+        plain = plain.replaceAll("Z", "Q"); // Z -> Q 변환
+        String key = cleanString(inputData.getKey()); // 공백제거, 대문자 변환
+        return new MaterialData(plain, key, zPoint);
     }
 
     // 암호판 생성하는 메소드
-    public char[][] createBoard(DataDto dataDto) {
+    public char[][] createBoard(MaterialData materialData) {
         char[][] board = new char[5][5];
-        String key = dataDto.getKey() + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String key = materialData.getKey() + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder boardKey = new StringBuilder();
 
         // key의 중복을 제거하여 boardKey에 저장
@@ -46,11 +43,9 @@ public class EncryptionService {
     }
 
     // 암호화 메소드
-    public DataDto plainToEncryption(DataDto dataDto, char[][] board) {
+    public EncryptionData plainToEncryption(String plain, char[][] board) {
         List<Character> plainList = new ArrayList<>(); // 중복 처리한 palin을 저장할 list
         List<Character> encryptionList = new ArrayList<>(); // 암호문을 저장할 list
-        String plain = dataDto.getPlain(); // dto의 plain을 변수로 저장
-        DataDto resultDto = new DataDto(); // 반환할 dto 선언
         StringBuilder overlapPoint = new StringBuilder(); // 중복 위치 체크하기 위한 변수 선언
 
         //연속되는 글자가 중복시 X 추가
@@ -66,13 +61,11 @@ public class EncryptionService {
                 overlapPoint.append("00");
             }
         }
-        resultDto.setOverlap(overlapPoint.toString()); // 중복 위치를 담은 문자열 dto에 저장
 
         StringBuilder cutTwoPlain = new StringBuilder(); // 두 글자씩 자른 plain 저장할 변수 선언
         for (int i = 0; i < plainList.size(); i += 2) {
             cutTwoPlain.append(plainList.get(i)).append(plainList.get(i + 1)).append(" ");
         }
-        resultDto.setPlain(cutTwoPlain.toString()); // 두 글자씩 자른 plain dto에 저장
 
         StringBuilder cutTwoEncryption = new StringBuilder(); // 두 글자씩 자른 암호문 저장할 변수 선언
         for (int i = 0; i < plainList.size(); i += 2) {
@@ -92,8 +85,7 @@ public class EncryptionService {
 
             cutTwoEncryption.append(encryptionList.get(i)).append(encryptionList.get(i + 1)).append(" ");
         }
-        resultDto.setEncryption(cutTwoEncryption.toString()); // 두 글자씩 자른 암호문 dto에 저장
-        return resultDto;
+        return new EncryptionData(cutTwoPlain.toString(), cutTwoEncryption.toString(), overlapPoint.toString());
     }
 
     // 복호화 메소드

@@ -1,6 +1,8 @@
 package kr.hs.mirim.encryption.controller;
 
-import kr.hs.mirim.encryption.dto.DataDto;
+import kr.hs.mirim.encryption.dto.EncryptionData;
+import kr.hs.mirim.encryption.dto.InputData;
+import kr.hs.mirim.encryption.dto.MaterialData;
 import kr.hs.mirim.encryption.service.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,11 +20,11 @@ public class EncryptionController {
     }
 
     @PostMapping("/encryption")
-    public String encryption(DataDto dataDto, Model model) {
-        DataDto materialDto =  service.stringToEncryption(dataDto);
-        char[][] board = service.createBoard(materialDto);
-        DataDto resultDto = service.plainToEncryption(materialDto, board);
-        String encryptionToPlain = service.encryptionToPlain(resultDto.getEncryption(), board, materialDto.getZPoint(), resultDto.getOverlap());
+    public String encryption(InputData dataDto, Model model) {
+        MaterialData materialData =  service.stringToEncryption(dataDto);
+        char[][] board = service.createBoard(materialData);
+        EncryptionData encryptionData = service.plainToEncryption(materialData.getPlain(), board);
+        String encryptionToPlain = service.encryptionToPlain(encryptionData.getEncryption(), board, materialData.getZPoint(), encryptionData.getOverlapPoint());
 
         model.addAttribute("string", dataDto.getPlain());
         model.addAttribute("key", dataDto.getKey());

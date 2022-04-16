@@ -5,10 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DataDto {
+public class InputData {
     private String plain;
     private String key;
-    private String zPoint;
-    private String encryption;
-    private String overlap;
 }
