@@ -26,8 +26,13 @@ public class EncryptionController {
         EncryptionData encryptionData = service.plainToEncryption(materialData.getPlain(), board);
         String encryptionToPlain = service.encryptionToPlain(encryptionData.getEncryption(), board, materialData.getZPoint(), encryptionData.getOverlapPoint());
 
-        model.addAttribute("string", dataDto.getPlain());
-        model.addAttribute("key", dataDto.getKey());
+        model.addAttribute("inputPlain", dataDto.getPlain());
+        model.addAttribute("inputKey", dataDto.getKey());
+        model.addAttribute("board", board);
+        model.addAttribute("cutTwoPlain", encryptionData.getPlain());
+        model.addAttribute("cutTwoEncryption", encryptionData.getEncryption());
+        model.addAttribute("encryptionToPlain", encryptionToPlain);
+
         return "encryption";
     }
 }
