@@ -10,19 +10,28 @@
 </head>
 <body>
 <div class="container">
-    <div clss="box">
-        <div class="title">다중 치환 암호화</div>
-        <div class="edit-container">
-            <form class="edit-form" action="/encryption" method="post">
-                <p for="plain" class="edit-text"> 평 문 </p>
-                <input type="text" id="plain" name="plain" class="edit-box">
-                <p for="Key" class="edit-text">암호키 </p>
-                <input type="text" id="Key" name="Key" class="edit-box">
-                <br><br>
-                <input type="submit" value="암호화" class="edit-btn">
-            </form>
-        </div>
+    <div class="title">다중 치환 암호화</div>
+    <div class="edit-container">
+        <form class="edit-form" action="/encryption" method="post" onsubmit="return checkForm()" name="form">
+            <p class="edit-text"> 평 문 </p>
+            <input type="text" id="plain" name="plain" class="edit-box" minlength="1">
+            <p class="edit-text">암호키 </p>
+            <input type="text" id="key" name="key" class="edit-box" minlength="1">
+            <br><br>
+            <input type="submit" value="암호화" class="edit-btn">
+        </form>
     </div>
 </div>
 </body>
+<script>
+    function checkForm() {
+        console.log('akdsksdj');
+        const form = document.form;
+        if (form.key.value === "" || form.plain.value === "") {
+            alert('평문과 암호키를 모두 입력해주세요.');
+            return false;
+        }
+        return true;
+    }
+</script>
 </html>
