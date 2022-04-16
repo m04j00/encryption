@@ -8,25 +8,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <title>3112</title>
 </head>
-
 <body>
 <div class="container">
     <div clss="box">
         <div class="title">다중 치환 암호화</div>
         <div class="edit-container">
-            <form class="edit-form" action="/encryption" method="post">
-                <label for="plain" class="edit-text"> 평 문 </label>
-                <input type="text" id="plain" name="plain" class="input-box">
+            <form class="edit-form" action="encryption.html" method="post">
+                <p for="plain" class="edit-text"> 평 문 </p>
+                <input type="text" id="plain" name="plain" class="edit-box">
+                <p for="Key" class="edit-text">암호키 </p>
+                <input type="text" id="Key" name="Key" class="edit-box">
                 <br><br>
-                <label for="key" class="edit-text">암호키 </label>
-                <input type="text" id="key" name="key" class="input-box">
-                <br><br>
-                <input type="submit" value="암호화">
+                <input type="submit" value="암호화" class="edit-btn">
             </form>
         </div>
     </div>
 </div>
-
 </body>
-
 </html>

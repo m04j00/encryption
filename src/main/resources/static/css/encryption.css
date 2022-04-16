@@ -1,0 +1,95 @@
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+}
+
+body {
+    background-color: #CBDED8;
+}
+
+.container {
+    background-color: white;
+    margin: 50px 100px;
+    padding: 1px;
+    height: 600px;
+    border-radius: 20px;
+    box-shadow: 1px 1px 7px 1px #00000031;
+}
+
+.material-div {
+    font-size: 20px;
+    margin-top: 70px;
+    margin-left: 200px;
+}
+
+.material-title {
+    float: left;
+    width: 100px;
+    text-align: center;
+}
+
+.material-content {
+    color: #00b074;
+}
+
+.encryption-board {
+    margin-top: 30px;
+    margin-left: 200px;
+    width: 350px;
+    height: 350px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    float: left;
+}
+
+th {
+    border: 1px solid #00b074;
+}
+
+.result-div {
+    font-size: 20px;
+    margin-left: 700px;
+    margin-top: 30px;
+}
+
+.result-name-box {
+    margin-bottom: 10px;
+    margin-right: 20px;
+}
+
+.result-box {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 2px solid #CBDED8;
+    width: 400px;
+    height: 30px;
+    color: #00b074;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+.back-btn {
+    color: black;
+    background-color: white;
+    border: 1px solid #00b074;
+    border-radius: 7px;
+    font-size: 20px;
+    width: 210px;
+    height: 50px;
+    float: right;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+.back-btn:hover {
+    color: white;
+    background-color: #00b074;
+    border: 1px solid white;
+}
+
+.back-btn a {
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+}

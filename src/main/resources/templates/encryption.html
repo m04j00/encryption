@@ -1,11 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <title>3112</title>
 </head>
+
 <body>
-<p th:text="${string}" ></p>
-<p th:text="${key}" ></p>
+<div class="container">
+    <div class="material-div">
+        <p class="material-title">평문</p>
+        <p class="material-content">ahkahhkahakh</p>
+        <p class="material-title">암호키</p>
+        <p class="material-content">ahkahhkahakh</p>
+    </div>
+    <table class="encryption-board">
+        <tr>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+        </tr>
+        <tr>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+        </tr>
+        <tr>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+        </tr>
+        <tr>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+        </tr>
+        <tr>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+            <th>a</th>
+        </tr>
+    </table>
+    <div class="result-div">
+        <p class="result-name-box">평문</p>
+        <p class="result-box">ahkakakakak</p>
+        <p class="result-name-box">암호문</p>
+        <p class="result-box">ahkakakakak</p>
+        <p class="result-name-box">복호문</p>
+        <p class="result-box">ahkakakakak</p>
+    </div>
+    <button class="back-btn" onclick="location.href='/'">돌아가기</button>
+</div>
 </body>
+
 </html>
