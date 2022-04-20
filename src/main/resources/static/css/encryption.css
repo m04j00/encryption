@@ -11,9 +11,12 @@ body {
     background-color: white;
     margin: 50px 100px;
     padding: 1px;
-    height: 600px;
+    height: auto;
+    overflow:hidden;
     border-radius: 20px;
     box-shadow: 1px 1px 7px 1px #00000031;
+    min-height: 610px;
+
 }
 
 .material-div {
@@ -39,17 +42,20 @@ body {
     height: 350px;
     border: 1px solid black;
     border-collapse: collapse;
+}
+.board-div{
     float: left;
 }
-
-th {
+.encryption-board th {
     border: 1px solid #00b074;
+    font-size: 20px;
 }
 
 .result-div {
     font-size: 20px;
-    margin-left: 700px;
     margin-top: 30px;
+    float: left;
+    margin-left: 150px;
 }
 
 .result-name-box {
@@ -80,6 +86,7 @@ th {
     float: right;
     margin-right: 30px;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .back-btn:hover {
