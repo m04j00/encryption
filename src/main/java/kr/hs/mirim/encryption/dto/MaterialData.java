@@ -13,4 +13,6 @@ public class MaterialData {
     private String key;
     @NonNull
     private String zPoint;
+    @NonNull
+    private String spacePoint;
 }

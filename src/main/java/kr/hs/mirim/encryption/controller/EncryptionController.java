@@ -24,7 +24,7 @@ public class EncryptionController {
         MaterialData materialData =  service.stringToEncryption(dataDto);
         char[][] board = service.createBoard(materialData);
         EncryptionData encryptionData = service.plainToEncryption(materialData.getPlain(), board);
-        String encryptionToPlain = service.encryptionToPlain(encryptionData.getEncryption(), board, materialData.getZPoint(), encryptionData.getOverlapPoint());
+        String encryptionToPlain = service.encryptionToPlain(encryptionData.getEncryption(), board, materialData.getZPoint(), encryptionData.getOverlapPoint(), materialData.getSpacePoint());
 
         model.addAttribute("inputPlain", dataDto.getPlain());
         model.addAttribute("inputKey", dataDto.getKey());
