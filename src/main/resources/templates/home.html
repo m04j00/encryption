@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <title>3112</title>
 </head>
 <body>
@@ -14,9 +14,9 @@
     <div class="edit-container">
         <form class="edit-form" action="/encryption" method="post" onsubmit="return checkForm()" name="form">
             <p class="edit-text"> 평 문 </p>
-            <input type="text" id="plain" name="plain" class="edit-box" minlength="1">
+            <input type="text" id="plain" name="plain" class="edit-box" maxlength="30" placeholder="영문 최대 30자까지 입력할 수 있습니다.">
             <p class="edit-text">암호키 </p>
-            <input type="text" id="key" name="key" class="edit-box" minlength="1">
+            <input type="text" id="key" name="key" class="edit-box" maxlength="30" placeholder="영문 최대 30자까지 입력할 수 있습니다.">
             <br><br>
             <input type="submit" value="암호화" class="edit-btn">
         </form>
@@ -25,9 +25,17 @@
 </body>
 <script>
     function checkForm() {
+        const check_num = /[0-9]/;
+        const check_spc = /[~!@#$%^&*()_+|<>?:{}]/;
+        const check_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
         const form = document.form;
-        if (form.key.value === "" || form.plain.value === "") {
+        const string = form.key.value + form.plain.value;
+        if (string === '') {
             alert('평문과 암호키를 모두 입력해주세요.');
+            return false;
+        } else if(check_num.test(string) || check_kor.test(string) || check_spc.test(string)){
+            alert('평문과 암호키는 영어로만 입력할 수 있습니다.');
             return false;
         }
         return true;

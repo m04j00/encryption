@@ -1,10 +1,6 @@
 * {
-    font-family: 'Nanum Gothic', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
-}
-
-body {
-    background-color: #CBDED8;
 }
 
 .container {
@@ -12,15 +8,15 @@ body {
     top: 50%;
     left: 50%;
     background-color: white;
+    padding: 1px;
     min-height: 610px;
-    box-shadow: 1px 1px 7px 1px #00000031;
     transform: translate(-50%, -50%);
     padding: 30px 500px;
 }
 
 .title {
     text-align: center;
-    font-size: 50px;
+    font-size: 35px;
     margin: 70px 0;
     font-weight: bold;
 }
@@ -32,7 +28,7 @@ body {
 .edit-text {
     padding-top: 5px;
     display: block;
-    font-size: 30px;
+    font-size: 20px;
     margin-bottom: 5px;
 }
 
@@ -41,12 +37,13 @@ body {
     margin-bottom: 50px;
     color: #00b074;
     padding-left: 10px;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: lighter;
     width: 700px;
     background-color: #efefef;
     border: none;
     height: 50px;
+    border-radius: 10px;
 }
 
 .edit-box:focus {
@@ -54,20 +51,23 @@ body {
 }
 
 .edit-btn {
-    color: black;
-    background-color: white;
-    border: 1px solid #00b074;
+    color: white;
+    background-color: #00b074;
+    border: none;
     font-size: 25px;
     width: 210px;
     height: 50px;
     bottom: 0px;
     display: block;
     margin: 50px auto 100px auto;
+    box-shadow: 1px 1px 10px 2px #00000031;
+    border-radius: 10px;
 
 }
 
 .edit-btn:hover {
     color: white;
     background-color: #00b074;
-    border: 1px solid white;
+    border: none;
+    box-shadow: none;
 }
